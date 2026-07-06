@@ -10,6 +10,16 @@
   border: 1px solid rgba(255,255,255,0.05);
   position: relative;
   overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: background-image 1s ease-in-out;
+  min-height: 500px;
+
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
 }
 
 .hero-banner h1 {

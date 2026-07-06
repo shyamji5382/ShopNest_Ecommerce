@@ -10,12 +10,17 @@ const createOrder = async (req, res) => {
             return res.status(400).json({ message: 'Invalid order data' });
         }
         else {
+            const formattedItems = items.map(item => ({
+            productId: item.productId || item._id,
+            qty: item.qty,
+            price: item.price
+        }));
         const order = new Order({
-            user: req.user._id,
-            items,
-            totalAmount,
-            address,
-            paymentId
+        user: req.user._id,
+        items: formattedItems,
+        totalAmount,
+        address,
+        paymentId
         });
         await order.save();
         const message = `Dear ${req.user.name},
@@ -39,9 +44,15 @@ const createOrder = async (req, res) => {
         await sendEmail(req.user.email, 'Order Created', message);
         res.status(201).json({ message: 'Order created successfully', order });
     }
-} catch (error) {
-    res.status(500).json({ message: 'Error creating order', error });
+    } catch (error) {
+    console.error("Create Order Error:", error);
+
+    res.status(500).json({
+        message: error.message,
+        stack: error.stack
+    });
 }
+
 };
 
 const myOrders = async (req, res) => {

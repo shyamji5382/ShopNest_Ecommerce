@@ -80,6 +80,41 @@
     gap: 15px;
   }
 }
+/* ===========================
+   Navbar Logo
+=========================== */
+
+.navbar-logo {
+  width: 42px;
+  height: 42px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-right: 10px;
+  vertical-align: middle;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px rgba(249, 115, 22, 0.35);
+}
+
+.navbar-logo:hover {
+  transform: scale(1.08) rotate(8deg);
+  box-shadow: 0 0 18px rgba(249, 115, 22, 0.6);
+}
+
+/* Align logo and text nicely */
+.navbar-brand a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .navbar-logo {
+    width: 36px;
+    height: 36px;
+  }
+}
+
 
 
 

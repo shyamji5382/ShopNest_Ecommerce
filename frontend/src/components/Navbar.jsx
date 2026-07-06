@@ -17,7 +17,7 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-brand">
         <Link to="/">
-        <img src="/logo.png" alt="ShopNestLogo" className="navbar-logo" />
+        <img src="https://i.pinimg.com/736x/d3/f3/77/d3f377afd7264a84ee9e7e13eb66ced0.jpg" alt="ShopNestLogo" className="navbar-logo" />
         ShopNest</Link>
       </div>
       <ul className="navbar-links">

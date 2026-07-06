@@ -23,7 +23,8 @@ const registerUser = async (req, res) => {
             const otp =Math.floor(100000 + Math.random()*900000).toString();
 
             const message =
-            'Welcome to ShopNest, $(name)! Your OTP for ShopNest is: $(otp)';
+            `Welcome to ShopNest, ${name}! Your OTP for ShopNest is: ${otp}`;
+           
             
             await sendEmail(email,'Welcome to Shopnest',message);
 

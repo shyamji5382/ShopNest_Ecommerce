@@ -63,7 +63,7 @@ const updateProduct = async (req, res) => {
                 console.log(result);
                 product.imageUrl = result.secure_url;
             }
-            const updateProduct = await product.save();
+            const updatedProduct = await product.save();
             res.json(updatedProduct);
         }
         else{

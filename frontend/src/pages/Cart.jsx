@@ -30,7 +30,7 @@ const Cart = () => {
         <div className="cart-layout">
           <div className="cart-items">
             {cartItems.map((item) => (
-              <div key={item.productId} className="cart-item">
+             <div key={item._id} className="cart-item">
                 <img src={item.imageUrl} alt={item.name} className="cart-item-image" />
                 <div className="cart-item-details">
                   <h4>{item.name}</h4>
@@ -40,7 +40,7 @@ const Cart = () => {
                     <span>{item.qty}</span>
                     <button onClick={() => handleUpdateQty(item, item.qty + 1)}>+</button>
                   </div>
-                  <button onClick={() => handleRemove(item.productId)} className="btn-remove">Remove</button>
+                  <button onClick={() => handleRemove(item._id)} className="btn-remove">Remove</button>
                 </div>
               </div>
             ))}

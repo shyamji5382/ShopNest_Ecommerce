@@ -28,7 +28,7 @@ const ProductDetail = () => {
   const handleAddToCart = () => {
     if (product) {
       dispatch(addToCart({
-        productId: product._id,
+        _id: product._id,
         name: product.name,
         price: product.price,
         imageUrl: product.imageUrl,

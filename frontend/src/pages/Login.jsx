@@ -27,6 +27,10 @@ const Login = () => {
       const data = await res.json();
 
       if (!res.ok) {
+        if (data.needsVerification) {
+          navigate('/verify-otp', { state: { email: data.email || email } });
+          return;
+        }
         throw new Error(data.message || 'Login failed');
       }
 

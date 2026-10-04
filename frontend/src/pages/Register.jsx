@@ -1,6 +1,5 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
 import '../styles/auth.css';
 
 const Register = () => {
@@ -11,7 +10,6 @@ const Register = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -32,18 +30,16 @@ const Register = () => {
       });
 
       const data = await res.json();
-      if(res.ok){
-        alert('Registration Successfull!');
-        login(data);
-        navigate('/');
-       
+      if (res.ok) {
+        // Account created but not verified yet — send them to enter the OTP
+        // that was emailed to them, instead of logging in directly.
+        navigate('/verify-otp', { state: { email: data.email || email } });
+      } else {
+        setError(data.message || 'Registration failed');
       }
-    
-      
-
-     
     } catch (error) {
       console.error(error);
+      setError('Something went wrong. Please try again.');
     } finally {
       setLoading(false);
     }

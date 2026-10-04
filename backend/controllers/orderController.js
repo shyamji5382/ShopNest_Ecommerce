@@ -1,59 +1,11 @@
 const Order = require('../model/Order');
 
-const sendEmail = require('../utils/sendEmail');
-
-// Create a new order
-const createOrder = async (req, res) => {
-    try {
-        const { items, totalAmount, address, paymentId } = req.body;
-        if (!items || items.length === 0 || !totalAmount || !address) {
-            return res.status(400).json({ message: 'Invalid order data' });
-        }
-        else {
-            const formattedItems = items.map(item => ({
-            productId: item.productId || item._id,
-            qty: item.qty,
-            price: item.price
-        }));
-        const order = new Order({
-        user: req.user._id,
-        items: formattedItems,
-        totalAmount,
-        address,
-        paymentId
-        });
-        await order.save();
-        const message = `Dear ${req.user.name},
-
-       Thank you for your order! We're happy to confirm that your order has been placed successfully with ShopNest.
-
-       Order Summary:
-      - Total Amount: ₹${totalAmount}
-      - Shipping Address: ${address.street}, ${address.city}, ${address.postalCode}, ${address.country}
-      - Payment ID: ${paymentId}
-
-      We're preparing your order for shipment and will notify you once it's on its way. You can track your order status anytime by logging into your ShopNest account.
-
-     If you have any questions, feel free to reach out to our support team.
-
-     Thank you for shopping with us!
-
-     Warm regards,
-     Team ShopNest`;
-       
-        await sendEmail(req.user.email, 'Order Created', message);
-        res.status(201).json({ message: 'Order created successfully', order });
-    }
-    } catch (error) {
-    console.error("Create Order Error:", error);
-
-    res.status(500).json({
-        message: error.message,
-        stack: error.stack
-    });
-}
-
-};
+// NOTE: Orders are no longer created directly through this controller.
+// An order is created as "pending" in paymentController.createdOrder,
+// and only confirmed (status -> 'processing', stock decremented) in
+// paymentController.verifyPayment after Razorpay signature verification.
+// This prevents a client from creating a paid-looking order without
+// actually paying, or with a manipulated amount.
 
 const myOrders = async (req, res) => {
     try {
@@ -89,11 +41,8 @@ const updateOrderStatus =async(req, res) => {
 };
 
 module.exports = {
-    createOrder,
     myOrders,
     getOrders,
     updateOrderStatus,
-
-
 };
         

@@ -1,70 +1,65 @@
-# Getting Started with Create React App
+# 🛒 ShopNest E-Commerce
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Full-stack MERN e-commerce application with OTP-verified authentication, Redux cart, Razorpay payments and an admin dashboard.
 
-## Available Scripts
+## Features
+**Users**
+- Register with email OTP verification (Nodemailer), JWT login, resend OTP
+- Shop page with search, category filter and sorting; product detail pages
+- Redux Toolkit shopping cart
+- Razorpay checkout with server-side HMAC SHA-256 payment signature verification
+- Order history, order success page, profile page
 
-In the project directory, you can run:
+**Admin**
+- Protected admin dashboard (role-based `protect` + `admin` middleware)
+- Sales analytics, order status updates
+- Product create / edit / delete with Cloudinary image upload
 
-### `npm start`
+## Tech Stack
+- **Frontend:** React, React Router, Redux Toolkit, Context API
+- **Backend:** Node.js, Express, MongoDB (Mongoose), JWT, bcryptjs, Multer, Cloudinary, Nodemailer, Razorpay
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Project Structure
+```
+backend/
+  config/ controllers/ middleware/ model/ routes/ utils/ seed.js index.js
+frontend/
+  src/ admin/ components/ context/ pages/ redux/ styles/
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Getting Started
 
-### `npm test`
+**Prerequisites:** Node.js 18+, a MongoDB URI (Atlas or local)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+git clone https://github.com/shyamji5382/ShopNest_Ecommerce.git
+cd ShopNest_Ecommerce
+npm install                      # installs root, backend and frontend dependencies
 
-### `npm run build`
+cp backend/.env.example backend/.env   # Windows: Copy-Item backend\.env.example backend\.env
+# fill in MONGO_URI and JWT_SECRET (Razorpay/Cloudinary keys are needed for payment and image upload)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+cd backend && npm run seed && cd ..    # creates admin user and sample products
+npm run dev                            # backend: :5000, frontend: :3000
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Test Credentials (after `npm run seed`)
+- **Admin:** `admin@shopnest.com` / `password123`
+- **New user:** register from the UI. If `EMAIL_USER`/`EMAIL_PASS` are not set, the OTP is printed in the backend terminal.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## API Overview
+| Route | Description |
+|---|---|
+| `POST /api/auth/register` `verify-otp` `resend-otp` `login` | Authentication |
+| `GET /api/auth/users` | List users (admin) |
+| `/api/products` | Product listing and details; create/update/delete (admin) |
+| `/api/orders` | Create orders, order history, status update (admin) |
+| `POST /api/payment/order` `verify` | Create Razorpay order, verify signature |
+| `GET /api/analytics` | Dashboard stats (admin) |
 
-### `npm run eject`
+## Notes
+- Payments use Razorpay **test mode**; add test keys in `backend/.env` to try checkout.
+- Product image upload requires Cloudinary credentials.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Author
+**Shyamji Patel** — CS undergraduate, GLA University

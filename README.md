@@ -1,163 +1,65 @@
 # 🛒 ShopNest E-Commerce
 
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
-![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
-![Version](https://img.shields.io/badge/version-1.0.0-orange)
+Full-stack MERN e-commerce application with OTP-verified authentication, Redux cart, Razorpay payments and an admin dashboard.
 
-**ShopNest** is a fully functional, scalable, and responsive E-Commerce platform designed to provide a seamless online shopping experience. It features user authentication, a dynamic product catalog, shopping cart functionality, secure checkout, and an admin dashboard for inventory management.
+## Features
+**Users**
+- Register with email OTP verification (Nodemailer), JWT login, resend OTP
+- Shop page with search, category filter and sorting; product detail pages
+- Redux Toolkit shopping cart
+- Razorpay checkout with server-side HMAC SHA-256 payment signature verification
+- Order history, order success page, profile page
 
----
+**Admin**
+- Protected admin dashboard (role-based `protect` + `admin` middleware)
+- Sales analytics, order status updates
+- Product create / edit / delete with Cloudinary image upload
 
-## ✨ Key Features
+## Tech Stack
+- **Frontend:** React, React Router, Redux Toolkit, Context API
+- **Backend:** Node.js, Express, MongoDB (Mongoose), JWT, bcryptjs, Multer, Cloudinary, Nodemailer, Razorpay
 
-### For Users 🛍️
-*   **User Authentication:** Secure signup, login, and password recovery using JWT/OAuth.
-*   **Product Catalog:** Browse products with advanced filtering, sorting, and search functionalities.
-*   **Shopping Cart:** Add, remove, and update product quantities dynamically.
-*   **Secure Checkout:** Integrated payment gateway (e.g., Stripe/Razorpay) for smooth transactions.
-*   **Order Tracking:** View order history and track current order status.
-*   **Responsive UI:** Optimized for Mobile, Tablet, and Desktop screens.
+## Project Structure
+```
+backend/
+  config/ controllers/ middleware/ model/ routes/ utils/ seed.js index.js
+frontend/
+  src/ admin/ components/ context/ pages/ redux/ styles/
+```
 
-### For Admins ⚙️
-*   **Dashboard:** Overview of total sales, active users, and recent orders.
-*   **Product Management:** Add, edit, or delete products and categories.
-*   **Order Management:** Update order statuses (Processing, Shipped, Delivered).
-*   **User Management:** View and manage registered users.
+## Getting Started
 
----
+**Prerequisites:** Node.js 18+, a MongoDB URI (Atlas or local)
 
-## 🛠️ Tech Stack
-
-*(Update these based on your actual project stack)*
-
-*   **Frontend:** React.js / Next.js, Redux Toolkit, Tailwind CSS / Material-UI
-*   **Backend:** Node.js, Express.js (or Django / SpringBoot)
-*   **Database:** MongoDB (or PostgreSQL / MySQL)
-*   **Authentication:** JSON Web Tokens (JWT), Bcrypt.js
-*   **Payment Gateway:** Stripe API / Razorpay
-*   **Cloud Storage:** Cloudinary / AWS S3 (for product images)
-
----
-
-## 🚀 Installation & Setup
-
-Follow these steps to run **ShopNest** locally on your machine.
-
-### Prerequisites
-*   Node.js installed (v14 or higher)
-*   MongoDB installed and running (or a MongoDB Atlas URI)
-*   Git installed
-
-### 1. Clone the Repository
 ```bash
 git clone https://github.com/shyamji5382/ShopNest_Ecommerce.git
 cd ShopNest_Ecommerce
+npm install                      # installs root, backend and frontend dependencies
+
+cp backend/.env.example backend/.env   # Windows: Copy-Item backend\.env.example backend\.env
+# fill in MONGO_URI and JWT_SECRET (Razorpay/Cloudinary keys are needed for payment and image upload)
+
+cd backend && npm run seed && cd ..    # creates admin user and sample products
+npm run dev                            # backend: :5000, frontend: :3000
 ```
 
-### 2. Install Dependencies
-You need to install dependencies for both the frontend and backend.
+## Test Credentials (after `npm run seed`)
+- **Admin:** `admin@shopnest.com` / `password123`
+- **New user:** register from the UI. If `EMAIL_USER`/`EMAIL_PASS` are not set, the OTP is printed in the backend terminal.
 
-**For Backend:**
-```bash
-cd backend
-npm install
-```
+## API Overview
+| Route | Description |
+|---|---|
+| `POST /api/auth/register` `verify-otp` `resend-otp` `login` | Authentication |
+| `GET /api/auth/users` | List users (admin) |
+| `/api/products` | Product listing and details; create/update/delete (admin) |
+| `/api/orders` | Create orders, order history, status update (admin) |
+| `POST /api/payment/order` `verify` | Create Razorpay order, verify signature |
+| `GET /api/analytics` | Dashboard stats (admin) |
 
-**For Frontend:**
-```bash
-cd frontend
-npm install
-```
+## Notes
+- Payments use Razorpay **test mode**; add test keys in `backend/.env` to try checkout.
+- Product image upload requires Cloudinary credentials.
 
-### 3. Environment Variables
-Create a `.env` file in the `backend` directory and add the following keys:
-```env
-PORT=5000
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret_key
-STRIPE_SECRET_KEY=your_stripe_secret
-CLOUDINARY_URL=your_cloudinary_url
-```
-
-### 4. Run the Application
-Start the backend and frontend servers.
-
-**Run Backend:**
-```bash
-cd backend
-npm run dev
-```
-
-**Run Frontend:**
-```bash
-cd frontend
-npm start
-```
-*The app should now be running on `http://localhost:3000`*
-
----
-
-## 📂 Folder Structure
-
-```text
-ShopNest_Ecommerce/
-├── backend/               # Server-side code (API, Models, Controllers)
-│   ├── config/            # Database and API configurations
-│   ├── controllers/       # Route logic
-│   ├── models/            # Database schemas
-│   ├── routes/            # API endpoints
-│   └── server.js          # Entry point for backend
-├── frontend/              # Client-side code (React/UI)
-│   ├── public/            # Static assets
-│   ├── src/
-│   │   ├── components/    # Reusable UI components
-│   │   ├── pages/         # Application screens (Home, Cart, Profile)
-│   │   ├── redux/         # State management
-│   │   └── App.js         # Entry point for frontend
-├── .gitignore
-└── README.md
-```
-
----
-
-## 🔌 API Endpoints (Reference)
-
-Here are a few core API routes used in the application:
-
-| HTTP Method | Endpoint | Description | Access |
-| :--- | :--- | :--- | :--- |
-| `POST` | `/api/users/login` | Authenticate user & get token | Public |
-| `POST` | `/api/users/register` | Register a new user | Public |
-| `GET` | `/api/products` | Fetch all products | Public |
-| `GET` | `/api/products/:id` | Fetch single product by ID | Public |
-| `POST` | `/api/orders` | Create a new order | Private |
-| `GET` | `/api/orders/myorders` | Get logged-in user's orders | Private |
-| `PUT` | `/api/admin/product/:id` | Update a product | Admin |
-
----
-
-## 📸 Screenshots
-*(Aap yahan apne project ki actual images add kar sakte hain. Upload screenshots to an `assets` folder or directly via GitHub issues/PRs and link them below)*
-
-![Homepage](https://via.placeholder.com/800x400?text=ShopNest+Homepage+Screenshot)
-![Cart View](https://via.placeholder.com/800x400?text=ShopNest+Cart+Screenshot)
-
----
-
-## 🤝 Contributing
-
-Contributions are always welcome! If you have any ideas, suggestions, or bug fixes:
-1. Fork the repository.
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`).
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
-4. Push to the branch (`git push origin feature/AmazingFeature`).
-5. Open a Pull Request.
-
----
-
-## 🛡️ License
-
-This project is licensed under the [MIT License](LICENSE).
-
----
-**Developed with ❤️ by [Shyamji](https://github.com/shyamji5382)**
+## Author
+**Shyamji Patel** — CS undergraduate, GLA University
